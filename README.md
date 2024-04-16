@@ -37,7 +37,7 @@ import AutoJoiner from 'tiptap-extension-auto-joiner'
 new Editor({
   extensions: [
     AutoJoiner.configure({
-      elementsToJoin: ["paragraph", "myCustomNode"]
+      elementsToJoin: ["paragraph", "myCustomNode"] //Default ["bulletList", "orderedList"]
     }),
   ],
 })

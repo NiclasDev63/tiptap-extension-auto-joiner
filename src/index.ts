@@ -38,7 +38,6 @@ function autoJoin(
       if (!after) break;
       if (index && joinable.indexOf(pos) == -1) {
         let before = parent.child(index - 1);
-        console.log(nodeTypes.includes(before.type));
         if (before.type == after.type && nodeTypes.includes(before.type))
           joinable.push(pos as number);
       }
