@@ -9,7 +9,7 @@ import typescript from 'rollup-plugin-typescript2'
 import pkg from './package.json'
 
 export default {
-  external: [/@tiptap\/pm\/.*/],
+  external: [/@tiptap\/pm\/.*/, '@tiptap/core'],
   input: 'src/index.ts',
   output: [
     {
@@ -48,6 +48,7 @@ export default {
       tsconfig: './tsconfig.json',
       tsconfigOverride: {
         compilerOptions: {
+          baseUrl: '.',
           declaration: true,
           paths: {
             './*': ['src/*'],

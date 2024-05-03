@@ -16,7 +16,8 @@ function autoJoin(
   let ranges: Array<number> = [];
   for (let i = 0; i < tr.mapping.maps.length; i++) {
     let map = tr.mapping.maps[i];
-    for (let j = 0; j < ranges.length; j++) ranges[j] = map.map(ranges[j]);
+    if (!map) continue;
+    for (let j = 0; j < ranges.length; j++) ranges[j] = map.map(ranges[j]!);
     map.forEach((_s, _e, from, to) => ranges.push(from, to));
   }
 
@@ -26,12 +27,12 @@ function autoJoin(
   for (let i = 0; i < ranges.length; i += 2) {
     let from = ranges[i],
       to = ranges[i + 1];
-    let $from = tr.doc.resolve(from),
-      depth = $from.sharedDepth(to),
+    let $from = tr.doc.resolve(from!),
+      depth = $from.sharedDepth(to!),
       parent = $from.node(depth);
     for (
       let index = $from.indexAfter(depth), pos = $from.after(depth + 1);
-      pos <= to;
+      pos <= to!;
       ++index
     ) {
       let after = parent.maybeChild(index);
@@ -50,8 +51,8 @@ function autoJoin(
   // Join the joinable points
   joinable.sort((a, b) => a - b);
   for (let i = joinable.length - 1; i >= 0; i--) {
-    if (canJoin(tr.doc, joinable[i])) {
-      newTr.join(joinable[i]);
+    if (canJoin(tr.doc, joinable[i]!)) {
+      newTr.join(joinable[i]!);
       joined = true;
     }
   }
@@ -92,7 +93,11 @@ const AutoJoiner = Extension.create<AutoJoinerOptions>({
 
           let joined = false;
           for (const transaction of transactions) {
-            const anotherJoin = autoJoin(transaction, newTr, joinableNodes);
+            const anotherJoin = autoJoin(
+              transaction,
+              newTr,
+              joinableNodes as NodeType[]
+            );
             joined = anotherJoin || joined;
           }
           if (joined) {
